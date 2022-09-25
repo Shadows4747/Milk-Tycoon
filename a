@@ -1,0 +1,89 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+local Window = Library.CreateLib("Milk Tycoon", "Synapse")
+
+local MainTab = Window:NewTab("Main")
+
+local MainSection = MainTab:NewSection("Main Functions")
+
+
+
+local plr = game:GetService("Players").LocalPlayer
+
+function GetTycoon()
+    local Tycoon 
+    for _,v in pairs(game:GetService("Workspace").Tycoons:GetChildren()) do
+        if v.Owner.Value == plr.Name then
+           Tycoon = v 
+        end
+    end
+    return Tycoon
+end
+
+
+getgenv().AutoCollect = false
+
+MainSection:NewToggle("Auto Collect Milk", "Auto collects milk", function(state)
+    if state then 
+        getgenv().AutoCollect = true
+        local Tycoon = GetTycoon() 
+        repeat
+            wait() 
+            for _,v in pairs(Tycoon.Drops:GetChildren()) do
+                if getgenv().AutoCollect then
+                pcall(function()
+                    v.Part.CFrame = plr.Character.HumanoidRootPart.CFrame 
+                end)
+                end
+                wait()
+            end
+        until getgenv().AutoCollect == false
+    else
+        getgenv().AutoCollect = false
+    end
+end)
+
+getgenv().AutoProcess = false
+
+MainSection:NewToggle("Auto Process Milk", "Auto processes milk", function(state)
+    if state then
+        getgenv().AutoProcess = true
+        local Tycoon = GetTycoon()
+        repeat
+            wait()
+            firetouchinterest(plr.Character.HumanoidRootPart, Tycoon.Buttons.Process, 0)
+            wait()
+            firetouchinterest(plr.Character.HumanoidRootPart, Tycoon.Buttons.Process, 1)
+            wait()
+        until getgenv().AutoProcess == false
+    else
+        getgenv().AutoProcess = false
+    end
+end)
+
+MainSection:NewButton("Redeem Codes", "Redeems codes", function()
+    local A_1 = "Cowmedian"
+local Event = game:GetService("ReplicatedStorage").Events.Codes
+Event:FireServer(A_1)
+local A_1 = "Bullseye"
+local Event = game:GetService("ReplicatedStorage").Events.Codes
+Event:FireServer(A_1)
+local A_1 = "Cowmedian"
+local Event = game:GetService("ReplicatedStorage").Events.Codes
+Event:FireServer(A_1)
+local A_1 = "Legend Dairy"
+local Event = game:GetService("ReplicatedStorage").Events.Codes
+Event:FireServer(A_1) 
+end) 
+ 
+local CreditsTab = Window:NewTab("Credits")
+local CreditsSection = CreditsTab:NewSection("Credits") 
+CreditsSection:NewLabel("Made by Shadow#4747")
+
+local vu = game:GetService("VirtualUser")
+
+	game:GetService("Players").LocalPlayer.Idled:connect(function()
+		vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		wait(1)
+		vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	end)
